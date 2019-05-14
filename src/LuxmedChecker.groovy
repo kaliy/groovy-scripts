@@ -102,6 +102,13 @@ class LuxmedChecker {
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("reservationSearchSubmitButton"))).click()
     }
 
+    static orthopedistChecks = { WebDriver driver ->
+        driver.findElementByXPath("//a[contains(text(), 'Chcę umówić wizytę lub badanie')]").click()
+        driver.findElementByXPath("//a[@datasubcategory = 'Inny problem' and @datacategory = 'Ortopeda']").click()
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@datapagepath='/Symptoms' and text() = 'Wizyta w placówce']"))).click()
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("reservationSearchSubmitButton"))).click()
+    }
+
     static slotChangingChecks = {driver ->
         driver.findElementByXPath("//a[contains(@class, 'changeTermButton') and contains(@data-service, '${configuration.luxmed.service}')]").click()
         new WebDriverWait(driver, 5)
@@ -115,6 +122,7 @@ class LuxmedChecker {
 
     static checksMapping = [
             'slot-change': slotChangingChecks,
+            'orthopedist': orthopedistChecks,
             'generic': genericChecks
     ]
 
