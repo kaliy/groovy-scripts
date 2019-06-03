@@ -47,6 +47,22 @@ class LuxmedChecker {
             def type = configuration.luxmed.type
             LuxmedChecker.checksMapping[type](driver)
 
+            if (configuration.luxmed.doctor) {
+                try {
+                    new WebDriverWait(driver, 1).until(ExpectedConditions.visibilityOfElementLocated(By.id('spinnerDiv')))
+                    new WebDriverWait(driver, 2).until(ExpectedConditions.invisibilityOfElementLocated(By.id('spinnerDiv')))
+                } catch(ignored){}
+                Thread.sleep(2000) //TODO
+                new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='caption' and text() = 'Lekarze: Dowolny lekarz']"))).click()
+                new WebDriverWait(driver, 5).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//ul[@id='__selectOptions']/li[contains(text(), '${configuration.luxmed.doctor}')]"), 0))[0].click()
+                (JavascriptExecutor) driver.executeScript("arguments[0].click();", driver.findElementById("__selectOverlay"))
+                new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("reservationSearchSubmitButton"))).click()
+                try {
+                    new WebDriverWait(driver, 1).until(ExpectedConditions.visibilityOfElementLocated(By.id('spinnerDiv')))
+                    new WebDriverWait(driver, 2).until(ExpectedConditions.invisibilityOfElementLocated(By.id('spinnerDiv')))
+                } catch(ignored){}
+            }
+
             def numberOfVisitsAsString = (driver.findElementByXPath("//*[@class='tableListGroup']").text =~ /(.*) dostępnych terminów/)[0][1]
             def doctorsContentElement = (driver.findElementsByXPath("//*[@class='tableList']"))
             def content = doctorsContentElement.isEmpty() ? "" : doctorsContentElement[0].text

@@ -2,7 +2,8 @@ luxmed {
     username = 'sasiskapiatnistaya'
     password = 'parowkaFTW'
     service = 'Konsultacja okulisty'
-    type = 'generic' //slot-change, generic, orthopedist (ignores service field)
+    doctor = 'KULAWIK ELŻBIETA'
+    type = 'generic' //slot-change, generic, orthopedist (ignores service configuration option)
 }
 
 pushbullet {
